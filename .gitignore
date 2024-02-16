@@ -1,0 +1,21 @@
+node_modules/
+build/
+dist/
+deploy/
+.DS_Store
+*~
+.idea
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.css.map
+.vscode/*.log
+package-lock.json
+telemetry-build/
+storybook-static/
+.eslintcache
+
+tsconfig.tsbuildinfo
+# local env files
+.env*.local
+.env

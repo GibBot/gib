@@ -1,0 +1,67 @@
+// schema.prisma
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  telegramId   BigInt        @unique
+  wallet       String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  games        Game[]
+  transactions Transaction[]
+}
+
+enum TransactionType {
+  DEPOSIT // txId
+  WITHDRAW // txId
+  SEND // no txId
+  GRAB // no txId
+}
+
+model Transaction {
+  id        Int             @id @default(autoincrement())
+  type      TransactionType
+  chainId   Int
+  token     String?
+  txId      String?         @unique
+  wallet    String?
+  amount    Decimal         @default(0)
+  gameId    Int?
+  game      Game?           @relation(fields: [gameId], references: [id])
+  createdAt DateTime        @default(now())
+  userId    Int?
+  user      User?           @relation(fields: [userId], references: [id])
+}
+
+enum GameType {
+  MoneyGun
+  LuckyDraw
+}
+
+model Game {
+  id           Int           @id @default(autoincrement())
+  type         GameType
+  senderId     Int
+  desc         String
+  data         Json
+  sender       User          @relation(fields: [senderId], references: [id])
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model BlockCheck {
+  id          Int      @id @default(autoincrement())
+  chainId     Int
+  blockHeight Int
+  createdAt   DateTime @default(now())
+}

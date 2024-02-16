@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "noEmit": true,
+    "sourceMap": false,
+    "declarationMap": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true
+  },
+  "include": ["src", "../types"],
+  "references": [{ "path": "../backend" }]
+}

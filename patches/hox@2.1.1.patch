@@ -1,0 +1,280 @@
+diff --git a/cjs/hox-root.js b/cjs/hox-root.js
+index 3ec750e1852bfd9e9692921a6be209348d80d112..0eb14dd5fd4dacc44d683ef1c059529529bea9bb 100644
+--- a/cjs/hox-root.js
++++ b/cjs/hox-root.js
+@@ -1,7 +1,9 @@
+ "use strict";
+-var __importDefault = (this && this.__importDefault) || function (mod) {
+-    return (mod && mod.__esModule) ? mod : { "default": mod };
+-};
++var __importDefault =
++  (this && this.__importDefault) ||
++  function (mod) {
++    return mod && mod.__esModule ? mod : { default: mod };
++  };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.HoxRoot = exports.registerGlobalExecutor = void 0;
+ const react_1 = __importDefault(require("react"));
+@@ -9,21 +11,32 @@ const shim_1 = require("use-sync-external-store/shim");
+ let globalExecutors = [];
+ const listeners = new Set();
+ function registerGlobalExecutor(executor) {
+-    globalExecutors = [...globalExecutors, executor];
+-    listeners.forEach(listener => listener());
++  globalExecutors = [...globalExecutors, executor];
++  listeners.forEach((listener) => listener());
+ }
+ exports.registerGlobalExecutor = registerGlobalExecutor;
+-const HoxRoot = props => {
+-    const executors = (0, shim_1.useSyncExternalStore)(onStoreChange => {
+-        listeners.add(onStoreChange);
+-        return () => {
+-            listeners.delete(onStoreChange);
+-        };
+-    }, () => {
+-        return globalExecutors;
+-    });
+-    return (react_1.default.createElement(react_1.default.Fragment, null,
+-        executors.map((Executor, index) => (react_1.default.createElement(Executor, { key: index }))),
+-        props.children));
++const HoxRoot = (props) => {
++  const executors = (0, shim_1.useSyncExternalStore)(
++    (onStoreChange) => {
++      listeners.add(onStoreChange);
++      return () => {
++        listeners.delete(onStoreChange);
++      };
++    },
++    () => {
++      return globalExecutors;
++    },
++    () => {
++      return globalExecutors;
++    }
++  );
++  return react_1.default.createElement(
++    react_1.default.Fragment,
++    null,
++    executors.map((Executor, index) =>
++      react_1.default.createElement(Executor, { key: index })
++    ),
++    props.children
++  );
+ };
+ exports.HoxRoot = HoxRoot;
+diff --git a/cjs/use-data-from-container.js b/cjs/use-data-from-container.js
+index 946e737e062ee7e5f2628dfc533591ea2e0b0b4f..d97eedba051906b19f0b9cf31868a1010f39aa3f 100644
+--- a/cjs/use-data-from-container.js
++++ b/cjs/use-data-from-container.js
+@@ -4,39 +4,46 @@ exports.useDataFromContainer = void 0;
+ const react_1 = require("react");
+ const shim_1 = require("use-sync-external-store/shim");
+ function useDataFromContainer(container, depsFn) {
+-    var _a;
+-    const depsFnRef = (0, react_1.useRef)(depsFn);
+-    depsFnRef.current = depsFn;
+-    const depsRef = (0, react_1.useRef)(((_a = depsFnRef.current) === null || _a === void 0 ? void 0 : _a.call(depsFnRef, container.data)) || []);
+-    return (0, shim_1.useSyncExternalStore)(onStoreChange => {
+-        function subscribe() {
+-            if (!depsFnRef.current) {
+-                onStoreChange();
+-            }
+-            else {
+-                const oldDeps = depsRef.current;
+-                const newDeps = depsFnRef.current(container.data);
+-                if (compare(oldDeps, newDeps)) {
+-                    onStoreChange();
+-                }
+-                depsRef.current = newDeps;
+-            }
++  var _a;
++  const depsFnRef = (0, react_1.useRef)(depsFn);
++  depsFnRef.current = depsFn;
++  const depsRef = (0, react_1.useRef)(
++    ((_a = depsFnRef.current) === null || _a === void 0
++      ? void 0
++      : _a.call(depsFnRef, container.data)) || []
++  );
++  return (0, shim_1.useSyncExternalStore)(
++    (onStoreChange) => {
++      function subscribe() {
++        if (!depsFnRef.current) {
++          onStoreChange();
++        } else {
++          const oldDeps = depsRef.current;
++          const newDeps = depsFnRef.current(container.data);
++          if (compare(oldDeps, newDeps)) {
++            onStoreChange();
++          }
++          depsRef.current = newDeps;
+         }
+-        container.subscribers.add(subscribe);
+-        return () => {
+-            container.subscribers.delete(subscribe);
+-        };
+-    }, () => container.data);
++      }
++      container.subscribers.add(subscribe);
++      return () => {
++        container.subscribers.delete(subscribe);
++      };
++    },
++    () => container.data,
++    () => container.data
++  );
+ }
+ exports.useDataFromContainer = useDataFromContainer;
+ function compare(oldDeps, newDeps) {
+-    if (oldDeps.length !== newDeps.length) {
+-        return true;
++  if (oldDeps.length !== newDeps.length) {
++    return true;
++  }
++  for (const index in newDeps) {
++    if (oldDeps[index] !== newDeps[index]) {
++      return true;
+     }
+-    for (const index in newDeps) {
+-        if (oldDeps[index] !== newDeps[index]) {
+-            return true;
+-        }
+-    }
+-    return false;
++  }
++  return false;
+ }
+diff --git a/es/hox-root.js b/es/hox-root.js
+index 36bf46b450333ed2c77d9d50b3c4665157c5741d..f3ed63acdd8180ace62c9171301681b58b4c08de 100644
+--- a/es/hox-root.js
++++ b/es/hox-root.js
+@@ -1,21 +1,32 @@
+-import React from 'react';
+-import { useSyncExternalStore } from 'use-sync-external-store/shim';
++import React from "react";
++import { useSyncExternalStore } from "use-sync-external-store/shim";
+ let globalExecutors = [];
+ const listeners = new Set();
+ export function registerGlobalExecutor(executor) {
+-    globalExecutors = [...globalExecutors, executor];
+-    listeners.forEach(listener => listener());
++  globalExecutors = [...globalExecutors, executor];
++  listeners.forEach((listener) => listener());
+ }
+-export const HoxRoot = props => {
+-    const executors = useSyncExternalStore(onStoreChange => {
+-        listeners.add(onStoreChange);
+-        return () => {
+-            listeners.delete(onStoreChange);
+-        };
+-    }, () => {
+-        return globalExecutors;
+-    });
+-    return (React.createElement(React.Fragment, null,
+-        executors.map((Executor, index) => (React.createElement(Executor, { key: index }))),
+-        props.children));
++export const HoxRoot = (props) => {
++  const executors = useSyncExternalStore(
++    (onStoreChange) => {
++      listeners.add(onStoreChange);
++      return () => {
++        listeners.delete(onStoreChange);
++      };
++    },
++    () => {
++      return globalExecutors;
++    },
++    () => {
++      return globalExecutors;
++    }
++  );
++  return React.createElement(
++    React.Fragment,
++    null,
++    executors.map((Executor, index) =>
++      React.createElement(Executor, { key: index })
++    ),
++    props.children
++  );
+ };
+diff --git a/es/use-data-from-container.js b/es/use-data-from-container.js
+index bf9422d56033b5505595927049207a8f708d4fac..ceb16fb7f2694ad7b27e24d4575243faa00ef381 100644
+--- a/es/use-data-from-container.js
++++ b/es/use-data-from-container.js
+@@ -1,38 +1,45 @@
+-import { useRef } from 'react';
+-import { useSyncExternalStore } from 'use-sync-external-store/shim';
++import { useRef } from "react";
++import { useSyncExternalStore } from "use-sync-external-store/shim";
+ export function useDataFromContainer(container, depsFn) {
+-    var _a;
+-    const depsFnRef = useRef(depsFn);
+-    depsFnRef.current = depsFn;
+-    const depsRef = useRef(((_a = depsFnRef.current) === null || _a === void 0 ? void 0 : _a.call(depsFnRef, container.data)) || []);
+-    return useSyncExternalStore(onStoreChange => {
+-        function subscribe() {
+-            if (!depsFnRef.current) {
+-                onStoreChange();
+-            }
+-            else {
+-                const oldDeps = depsRef.current;
+-                const newDeps = depsFnRef.current(container.data);
+-                if (compare(oldDeps, newDeps)) {
+-                    onStoreChange();
+-                }
+-                depsRef.current = newDeps;
+-            }
++  var _a;
++  const depsFnRef = useRef(depsFn);
++  depsFnRef.current = depsFn;
++  const depsRef = useRef(
++    ((_a = depsFnRef.current) === null || _a === void 0
++      ? void 0
++      : _a.call(depsFnRef, container.data)) || []
++  );
++  return useSyncExternalStore(
++    (onStoreChange) => {
++      function subscribe() {
++        if (!depsFnRef.current) {
++          onStoreChange();
++        } else {
++          const oldDeps = depsRef.current;
++          const newDeps = depsFnRef.current(container.data);
++          if (compare(oldDeps, newDeps)) {
++            onStoreChange();
++          }
++          depsRef.current = newDeps;
+         }
+-        container.subscribers.add(subscribe);
+-        return () => {
+-            container.subscribers.delete(subscribe);
+-        };
+-    }, () => container.data);
++      }
++      container.subscribers.add(subscribe);
++      return () => {
++        container.subscribers.delete(subscribe);
++      };
++    },
++    () => container.data,
++    () => container.data
++  );
+ }
+ function compare(oldDeps, newDeps) {
+-    if (oldDeps.length !== newDeps.length) {
+-        return true;
++  if (oldDeps.length !== newDeps.length) {
++    return true;
++  }
++  for (const index in newDeps) {
++    if (oldDeps[index] !== newDeps[index]) {
++      return true;
+     }
+-    for (const index in newDeps) {
+-        if (oldDeps[index] !== newDeps[index]) {
+-            return true;
+-        }
+-    }
+-    return false;
++  }
++  return false;
+ }

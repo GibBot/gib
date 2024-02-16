@@ -1,0 +1,131 @@
+{
+  "name": "bot",
+  "private": true,
+  "keywords": [],
+  "license": "Apache-2.0",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "lint": "eslint 'packages/**/*.{ts,tsx}' && prettier -c 'packages/**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix 'packages/**/*.{ts,tsx}' && prettier -c 'packages/**/*.{ts,tsx}' --write",
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "husky install",
+    "tsc": "npm-run-all --parallel *:tsc",
+    "clean": "rm -rf node_modules && rm -rf packages/*/node_modules",
+    "dev": "pnpm --filter @bot/web dev"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "printWidth": 75,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "plugins": [
+      "unused-imports"
+    ],
+    "extends": [
+      "airbnb",
+      "airbnb-typescript",
+      "plugin:prettier/recommended",
+      "plugin:react/recommended"
+    ],
+    "rules": {
+      "class-methods-use-this": "off",
+      "no-continue": "off",
+      "no-nested-ternary": "off",
+      "no-plusplus": "off",
+      "no-promise-executor-return": "off",
+      "no-restricted-syntax": "off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-shadow": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/no-use-before-define": "off",
+      "import/extensions": "off",
+      "import/no-extraneous-dependencies": "off",
+      "import/no-named-default": "off",
+      "import/order": "off",
+      "import/prefer-default-export": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "react/display-name": "off",
+      "react/function-component-definition": "off",
+      "react/jsx-closing-tag-location": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/no-array-index-key": "off",
+      "react/no-this-in-sfc": "off",
+      "react/no-unstable-nested-components": "off",
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/require-default-props": "off",
+      "unused-imports/no-unused-imports": "error",
+      "react/button-has-type": "off",
+      "react/jsx-curly-brace-presence": "off",
+      "no-underscore-dangle": "off",
+      "jsx-a11y/label-has-associated-control": "off",
+      "@typescript-eslint/naming-convention": "off",
+      "jsx-a11y/anchor-is-valid": "off",
+      "jsx-a11y/anchor-has-content": "off",
+      "no-restricted-exports": "off",
+      "consistent-return": "off"
+    }
+  },
+  "dependencies": {
+    "dayjs": "^1.11.7",
+    "lodash": "^4.17.21",
+    "@types/lodash": "^4.14.199",
+    "axios": "^1.6.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.0",
+    "@commitlint/config-conventional": "^17.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.34.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "rimraf": "^4.0.7",
+    "typescript": "^5.1.6"
+  },
+  "packageManager": "pnpm@7.9.5",
+  "engines": {
+    "node": ">=18"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "hox@2.1.1": "patches/hox@2.1.1.patch"
+    }
+  }
+}

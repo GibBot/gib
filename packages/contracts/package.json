@@ -1,0 +1,54 @@
+{
+  "name": "@bot/contracts",
+  "version": "0.0.1",
+  "description": "",
+  "license": "MIT",
+  "author": "amanusk",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "pnpm tsc -p tsconfig.build.json",
+    "clean": "rm -rf ./artifacts ./cache ./typechain ./dist ",
+    "compile": "npx hardhat compile",
+    "postinstall": "pnpm compile && pnpm build",
+    "test": "npx hardhat test",
+    "test:gas": "UPDATE_SNAPSHOT=1 pnpm test --grep gas",
+    "deploy:testnet": "npx hardhat run scripts/deploy-testnet.ts --network goerli",
+    "update:testnet": "npx hardhat run scripts/update-testnet.ts --network goerli"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/contracts-upgradeable": "^4.8.3",
+    "@pythnetwork/pyth-sdk-solidity": "^2.2.1",
+    "dotenv": "^16.4.1",
+    "mocha-chai-jest-snapshot": "^1.1.4",
+    "prettier-plugin-solidity": "^1.2.0"
+  },
+  "devDependencies": {
+    "@ethersproject/abi": "^5.7.0",
+    "@ethersproject/providers": "^5.7.1",
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.4",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+    "@nomicfoundation/hardhat-verify": "^1.1.1",
+    "@nomiclabs/hardhat-ethers": "^2.2.0",
+    "@nomiclabs/hardhat-etherscan": "^3.1.1",
+    "@openzeppelin/hardhat-upgrades": "^1.24.0",
+    "@typechain/ethers-v5": "^10.1.0",
+    "@typechain/hardhat": "^6.1.3",
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.11.2",
+    "@uniswap/snapshot-gas-cost": "^1.0.0",
+    "chai": "^4.3.6",
+    "ethers": "^5.7.1",
+    "hardhat": "^2.12.0",
+    "hardhat-gas-reporter": "^1.0.9",
+    "solidity-coverage": "^0.8.2",
+    "typechain": "^8.1.0"
+  }
+}

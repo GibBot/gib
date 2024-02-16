@@ -1,0 +1,7 @@
+{
+  "files.eol": "auto",
+  "prettier.endOfLine": "crlf",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
